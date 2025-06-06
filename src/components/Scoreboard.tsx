@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
-import { PlayerType } from '../types/player';
-import Player from './Player';
-
+import React, { useState } from "react";
+import { PlayerType } from "../types/player";
+import Player from "./Player";
+import Header from "./Header";
+import AddPlayerForm from "./AddPlayerForm";
 
 const INITIAL_PLAYERS: PlayerType[] = [
   { name: "Player A", score: 11 },
@@ -9,40 +10,54 @@ const INITIAL_PLAYERS: PlayerType[] = [
   { name: "Player C", score: 50 },
 ];
 
+ // 🧠 This function is passed to AddPlayerForm
+
 const Scoreboard = () => {
-    const [players , setPlayers] =useState<PlayerType[]>(INITIAL_PLAYERS)
+  const [playerState, setPlayers] = useState<PlayerType[]>(INITIAL_PLAYERS);
+
+    const handleAddPlayer = ( name: string) => {
+      if (name  ===  '') return
+      
+      setPlayers([...playerState, { name, score: 0 }]);
+    };
+
+
+
+
   return (
     <div className="scoreboard">
-        {players.map((player)=>{
-            return(
-                <div className="players">
+      {/* <Header players={players} /> */}
+      <div className="players">
+        {playerState.map((x, i) => {
+          return <Player key={i} name={x.name} score={x.score} />;
+        })}
+      </div>
+      <AddPlayerForm
 
-                    <Player
-                        name ={player.name}
-                        score = {player.score}
-                        />
-                    
-                    
-                </div>
-
-           
-
-            )
-        
-    
-          
-        }
-            
-
-             
-
-        
-    )}
-
+      onAdd={handleAddPlayer}
+      />
     </div>
- 
-)
-  
-}
+  );
+};
 
-export default Scoreboard
+export default Scoreboard;
+
+/*/
+//   const handleAdd = (e: React.FormEvent<HTMLFormElement>) => {
+//     e.preventDefault();
+//     if (product && description) {
+//       setProducto([
+//         ...producto,
+//         { id: Date.now(), product, description, isDone: false },
+//       ]);
+//       setProduct("");
+//       setDescription("");
+//       console.log(producto);
+//     } else {
+//       alert("Enter Valid Data");
+//     }
+// //   };
+
+
+
+*/

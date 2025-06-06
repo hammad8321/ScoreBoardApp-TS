@@ -10,7 +10,9 @@ const Player = ({name , score }:PlayerProps) => {
   return (
     <div className="player">
     <div className="player-name">
-      <button className="remove-player" >✖</button>
+      <a className="remove-player" >✖</a>
+        {/* <button className="save-button" onClick={()=>{}}>💾</button> */}
+   
       {name}
     </div>
          <div className="player-score">

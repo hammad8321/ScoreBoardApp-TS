@@ -5,15 +5,16 @@ import React from 'react'
 interface CounterProps {
  
   score: number;
+ 
 }
 
 
 const Counter:React.FC<CounterProps> = ({score}:CounterProps) => {
   return (
     <div className="counter">
-        <button >-</button>
+        <button className="counter-action decrement">-</button>
       <div className="counter-score">{score}</div>
-        <button >+</button>
+        <button className="counter-action increment" >+</button>
     </div>
   )
 }

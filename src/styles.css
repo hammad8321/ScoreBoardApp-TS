@@ -220,3 +220,17 @@ body {
     letter-spacing: 2px;
     color: #666;
   }
+
+  .player-name button {
+  background: none;
+  border: none;
+  margin-left: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.edit-input {
+  margin-left: 10px;
+  font-size: 1rem;
+  padding: 2px 4px;
+}

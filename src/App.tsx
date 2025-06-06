@@ -4,9 +4,18 @@ import './styles.css'
 
 
 
+
+
 function App() {
   return (
-        <Scoreboard/>
+    <div>
+
+
+       <Scoreboard/>
+
+
+    </div>
+       
   );
 }
 
