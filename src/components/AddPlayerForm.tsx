@@ -1,23 +1,22 @@
-import React, { useState } from 'react'
-
+import React, { useState } from "react";
 
 interface AddPlayerFormProps {
-  onAdd: (name: string) => void;
+  setName: React.Dispatch<React.SetStateAction<string>>;
+  name: string;
+  onAdd: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
-const AddPlayerForm: React.FC<AddPlayerFormProps> = ({ onAdd } : AddPlayerFormProps) => {
-    const [name, setName] = useState("");
-
-    
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onAdd(name);
-    setName("");
-  };
+const AddPlayerForm: React.FC<AddPlayerFormProps> = ({
+  onAdd,
+  setName,
+  name,
+}: AddPlayerFormProps) => {
   return (
-   <div className="add-player-form">
-      <form 
-           onSubmit={handleSubmit}
+    <div className="add-player-form">
+      <form
+        onSubmit={(e) => {
+          onAdd(e);
+        }}
       >
         <input
           type="text"
@@ -28,7 +27,8 @@ const AddPlayerForm: React.FC<AddPlayerFormProps> = ({ onAdd } : AddPlayerFormPr
         <input type="submit" value="Add Player" />
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default AddPlayerForm
+export default AddPlayerForm;
+
