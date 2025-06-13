@@ -21,7 +21,7 @@ const Header: React.FC<HeaderProps> = ({ playerState }) => {
     //    
     // </header>
 <div className="header">
-     <table className="stats">
+     {/* <table className="stats">
       <tbody>
         <tr>
           <td>Players:</td>
@@ -34,7 +34,7 @@ const Header: React.FC<HeaderProps> = ({ playerState }) => {
       </tbody>
       
 
-    </table>
+    </table> */}
     <div className="stats">
 
     

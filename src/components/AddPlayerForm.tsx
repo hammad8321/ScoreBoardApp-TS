@@ -14,9 +14,8 @@ const AddPlayerForm: React.FC<AddPlayerFormProps> = ({
   return (
     <div className="add-player-form">
       <form
-        onSubmit={(e) => {
-          onAdd(e);
-        }}
+        onSubmit={onAdd
+        }
       >
         <input
           type="text"

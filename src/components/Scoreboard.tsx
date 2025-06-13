@@ -39,24 +39,43 @@ const Scoreboard: React.FC = () => {
    * @param e - React form event from submission
    */
 
-  const handleAddPlayer = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (name.trim()) {
-      const newPlayer: PlayerType = {
+
+
+  function handleAddPlayer(e:React.FormEvent<HTMLFormElement>){
+
+     e.preventDefault();
+    if(name.trim()){
+      const newPlayer :PlayerType ={
         id: Date.now(),
-        name: name.trim(),
-        score: 0,
+        name : name.trim(),
+        score:0
       };
-
-      // Update players list with the new player added
-
-      setPlayers([...playerState, newPlayer]);
-      // Clear input field for next entry
-      setName("");
-    } else {
-      alert("Enter valid player name");
+      setPlayers([... playerState,newPlayer])
+      setName("")
+    }else{
+      alert("Please enter valid value")
     }
-  };
+
+  }
+
+  // const handleAddPlayer = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   if (name.trim()) {
+  //     const newPlayer: PlayerType = {
+  //       id: Date.now(),
+  //       name: name.trim(),
+  //       score: 0,
+  //     };
+
+  //     // Update players list with the new player added
+
+  //     setPlayers([...playerState, newPlayer]);
+  //     // Clear input field for next entry
+  //     setName("");
+  //   } else {
+  //     alert("Enter valid player name");
+  //   }
+  // };
 
   const handleScoreChange = (index: number, delta: number) => {
     setPlayers((prevPlayers) => {
@@ -66,10 +85,13 @@ const Scoreboard: React.FC = () => {
     });
   };
 
-  const handleRemovePlayer=(id: number )=>{
-
-     setPlayers(playerState.filter(player => player.id !== id));
+  function handleRemovePlayer (id: number ){
+    setPlayers(playerState.filter(x=>x.id !== id))
   }
+  // const handleRemovePlayer=(id: number )=>{
+
+  //    setPlayers(playerState.filter(player => player.id !== id));
+  // }
   return (
     <div className="scoreboard">
       <Header playerState={playerState} />
@@ -90,7 +112,7 @@ const Scoreboard: React.FC = () => {
         })}
       </div>
       {/* Form component for adding a new player */}
-      <AddPlayerForm name={name} setName={setName} onAdd={handleAddPlayer} />
+      <AddPlayerForm name={name} setName={setName} onAdd={(e)=>handleAddPlayer(e)} />
     </div>
   );
 };
