@@ -1,18 +1,19 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect } from "react";
 import { PlayerType } from "../types/player";
 import Player from "./Player";
 import Header from "./Header";
 import AddPlayerForm from "./AddPlayerForm";
+import * as api                from '../services/api';
 
 /**
  * Initial list of players with default scores.
  */
 
-const INITIAL_PLAYERS: PlayerType[] = [
-  {id:1,  name: "Player A", score: 11 },
-  {id:2, name: "Player B", score: 30 },
-  {id:3, name: "Player C", score: 50 },
-];
+// const INITIAL_PLAYERS: PlayerType[] = [
+//   {id:1,  name: "Player A", score: 11 },
+//   {id:2, name: "Player B", score: 30 },
+//   {id:3, name: "Player C", score: 50 },
+// ];
 
 // 🧠 This function is passed to AddPlayerForm
 /**
@@ -24,7 +25,7 @@ const INITIAL_PLAYERS: PlayerType[] = [
  */
 const Scoreboard: React.FC = () => {
   // State to hold the current list of players
-  const [playerState, setPlayers] = useState<PlayerType[]>(INITIAL_PLAYERS);
+  const [playerState, setPlayers] = useState<PlayerType[]>([]);
   // State to hold the current input value for new player name
   const [name, setName] = useState("");
 
@@ -38,60 +39,70 @@ const Scoreboard: React.FC = () => {
    *
    * @param e - React form event from submission
    */
+ // 1️⃣ Load players on mount
 
+//  fetch('https://localhost:44378/api/Players')
+//   .then(res => res.json())
+//   .then(data => console.log(data))
+//   .catch(err => console.error('Fetch failed:', err));
+  useEffect(() => {
+    api.fetchPlayers()
+   
+
+      .then(res => {console.log("Fetched players:", res.data);
+        setPlayers(res.data);})
+      .catch(err => {
+      console.error("API error:", err);
+    });
+     
+  }, []);
 
 
   function handleAddPlayer(e:React.FormEvent<HTMLFormElement>){
 
      e.preventDefault();
-    if(name.trim()){
-      const newPlayer :PlayerType ={
-        id: Date.now(),
-        name : name.trim(),
-        score:0
-      };
-      setPlayers([... playerState,newPlayer])
-      setName("")
-    }else{
-      alert("Please enter valid value")
-    }
+      if (!name.trim()) return alert('Please enter valid name');
+       api.addPlayer({ name: name.trim(), score: 0 })
+      .then(res => {
+        setPlayers(prev => [...prev, res.data]);
+        setName('');
+      })
+      .catch(console.error);
+
+
+      
+ 
 
   }
 
-  // const handleAddPlayer = (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   if (name.trim()) {
-  //     const newPlayer: PlayerType = {
-  //       id: Date.now(),
-  //       name: name.trim(),
-  //       score: 0,
-  //     };
-
-  //     // Update players list with the new player added
-
-  //     setPlayers([...playerState, newPlayer]);
-  //     // Clear input field for next entry
-  //     setName("");
-  //   } else {
-  //     alert("Enter valid player name");
-  //   }
-  // };
-
+// 3️⃣ Change score and persist
   const handleScoreChange = (index: number, delta: number) => {
-    setPlayers((prevPlayers) => {
-      const updatedPlayers = [...prevPlayers]; // copy array
-      updatedPlayers[index].score += delta; // update score
-      return updatedPlayers; // set new state
+    const player = playerState[index];
+    const updated: PlayerType = { ...player, score: player.score + delta };
+
+    api.updatePlayer(updated)
+      .then(() => {
+        setPlayers(prev => {
+          const copy = [...prev];
+          copy[index] = updated;
+          return copy;
+        });
+      })
+       .catch(err => {
+      console.error("Failed to update score", err);
+      alert("Error updating score");
     });
   };
 
-  function handleRemovePlayer (id: number ){
-    setPlayers(playerState.filter(x=>x.id !== id))
-  }
-  // const handleRemovePlayer=(id: number )=>{
+  // 4️⃣ Remove player
+  const handleRemovePlayer = (id: number) => {
+    api.deletePlayer(id)
+      .then(() => {
+        setPlayers(prev => prev.filter(p => p.id !== id));
+      })
+      .catch(console.error);
+  };
 
-  //    setPlayers(playerState.filter(player => player.id !== id));
-  // }
   return (
     <div className="scoreboard">
       <Header playerState={playerState} />
